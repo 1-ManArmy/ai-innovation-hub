@@ -141,10 +141,16 @@ function App() {
 
       const response = await spark.llm(prompt, 'gpt-4o', true)
       const insights = JSON.parse(response)
-      setPatternInsights(insights)
+      if (Array.isArray(insights)) {
+        setPatternInsights(insights)
+      } else {
+        console.error('Invalid insights format received:', insights)
+        setPatternInsights([])
+      }
       
     } catch (error) {
       console.error('Pattern insights generation error:', error)
+      setPatternInsights([]) // Reset to empty array on error
     } finally {
       setIsGeneratingInsights(false)
     }
@@ -590,7 +596,7 @@ function App() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {patternInsights.map((insight, index) => (
+                      {Array.isArray(patternInsights) && patternInsights.map((insight, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, y: 20 }}
@@ -622,7 +628,7 @@ function App() {
                         </motion.div>
                       ))}
                       
-                      {patternInsights.length > 0 && (
+                      {Array.isArray(patternInsights) && patternInsights.length > 0 && (
                         <div className="text-center pt-4">
                           <Button 
                             onClick={generatePatternInsights} 
