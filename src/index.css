@@ -28,6 +28,7 @@
   --input: oklch(0.88 0.03 240);
   --ring: oklch(0.45 0.15 240);
   --radius: 0.75rem;
+  --font-sans: "Mona Sans";
 }
 
 @theme {
@@ -60,7 +61,7 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   line-height: 1.6;
 }
 
