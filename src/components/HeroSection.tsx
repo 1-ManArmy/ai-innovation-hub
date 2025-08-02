@@ -21,7 +21,7 @@ export function HeroSection({ onExploreModules }: HeroSectionProps) {
         </div>
       </motion.div>
 
-      <div className="max-w-6xl mx-auto text-center relative z-10 mt-16">
+      <div className="max-w-6xl mx-auto text-center relative z-10 mt-24">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ export function HeroSection({ onExploreModules }: HeroSectionProps) {
             >
               <Heart size={28} color="white" weight="fill" />
             </motion.div>
-            <h1 className="text-3xl md:text-4xl font-bold gradient-text">
+            <h1 className="text-2xl md:text-3xl font-bold gradient-text">
               Mood Mirror AI
             </h1>
           </div>

@@ -1,24 +1,74 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { MessageCircle, Mic, Send, Sparkles } from '@phosphor-icons/react'
+import { MessageCircle, Mic, Send, Sparkles, User, Robot } from '@phosphor-icons/react'
+import { toast } from 'sonner'
+
+interface ChatMessage {
+  id: string
+  content: string
+  sender: 'user' | 'ai'
+  timestamp: Date
+}
 
 export function InteractiveChat() {
   const [message, setMessage] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim()) return
     
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      content: message.trim(),
+      sender: 'user',
+      timestamp: new Date()
+    }
+
+    setChatHistory(prev => [...prev, userMessage])
+    setMessage('')
     setIsProcessing(true)
-    // Simulate processing
-    setTimeout(() => {
+
+    try {
+      // Create AI prompt using spark.llmPrompt
+      const prompt = spark.llmPrompt`You are an AI assistant for the One Last AI platform. The user just said: "${userMessage.content}". Provide a helpful, friendly, and engaging response. Keep it conversational and under 100 words.`
+      
+      // Get AI response
+      const aiResponse = await spark.llm(prompt, "gpt-4o-mini")
+      
+      const aiMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content: aiResponse,
+        sender: 'ai',
+        timestamp: new Date()
+      }
+
+      setChatHistory(prev => [...prev, aiMessage])
+      toast.success('AI response received!')
+    } catch (error) {
+      console.error('Error getting AI response:', error)
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        content: "I'm sorry, I'm having trouble processing your message right now. Please try again later.",
+        sender: 'ai',
+        timestamp: new Date()
+      }
+      setChatHistory(prev => [...prev, errorMessage])
+      toast.error('Failed to get AI response')
+    } finally {
       setIsProcessing(false)
-      setMessage('')
-    }, 2000)
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
+    }
   }
 
   return (
@@ -32,10 +82,10 @@ export function InteractiveChat() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-            Try Our AI Communication
+            Live AI Communication
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Experience real-time AI communication with both voice and text options
+            Chat directly with our AI assistant and get real-time intelligent responses
           </p>
         </motion.div>
 
@@ -49,89 +99,123 @@ export function InteractiveChat() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageCircle size={24} className="text-accent" />
-                Interactive AI Demo
+                Live AI Chat
               </CardTitle>
               <CardDescription>
-                Communicate with our AI using voice or text input
+                Chat with our AI assistant - get real responses instantly
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <MessageCircle size={16} className="text-primary" />
-                    <span className="font-medium">Text Chat</span>
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                      Available
-                    </Badge>
-                  </div>
-                  <Textarea
-                    placeholder="Type your message here..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="min-h-32 resize-none bg-background/50 border-border/50"
-                  />
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={isProcessing || !message.trim()}
-                    className="w-full bg-primary hover:bg-primary/90"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Sparkles size={16} className="mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Send size={16} className="mr-2" />
-                        Send Message
-                      </>
-                    )}
-                  </Button>
+              {/* Chat History */}
+              {chatHistory.length > 0 && (
+                <div className="space-y-4 max-h-64 overflow-y-auto bg-background/30 rounded-lg p-4 border border-border/30">
+                  <AnimatePresence>
+                    {chatHistory.map((chat) => (
+                      <motion.div
+                        key={chat.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className={`flex gap-3 ${chat.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                      >
+                        <div className={`flex gap-2 max-w-[80%] ${chat.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                            chat.sender === 'user' ? 'bg-primary/20' : 'bg-accent/20'
+                          }`}>
+                            {chat.sender === 'user' ? (
+                              <User size={16} className="text-primary" />
+                            ) : (
+                              <Robot size={16} className="text-accent" />
+                            )}
+                          </div>
+                          <div className={`rounded-lg p-3 ${
+                            chat.sender === 'user' 
+                              ? 'bg-primary/20 text-primary-foreground' 
+                              : 'bg-card/50 text-card-foreground'
+                          }`}>
+                            <p className="text-sm">{chat.content}</p>
+                            <p className="text-xs opacity-60 mt-1">
+                              {chat.timestamp.toLocaleTimeString()}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                  {isProcessing && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex gap-3 justify-start"
+                    >
+                      <div className="flex gap-2">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-accent/20">
+                          <Robot size={16} className="text-accent" />
+                        </div>
+                        <div className="bg-card/50 rounded-lg p-3">
+                          <div className="flex items-center gap-2">
+                            <Sparkles size={16} className="text-accent animate-spin" />
+                            <span className="text-sm text-muted-foreground">AI is thinking...</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
+              )}
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Mic size={16} className="text-secondary" />
-                    <span className="font-medium">Voice Chat</span>
-                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                      Coming Soon
-                    </Badge>
-                  </div>
-                  <div className="min-h-32 bg-background/30 border border-border/30 rounded-lg flex items-center justify-center">
-                    <div className="text-center text-muted-foreground">
-                      <Mic size={48} className="mx-auto mb-3 opacity-50" />
-                      <p className="text-sm">Voice chat will be available soon</p>
-                    </div>
-                  </div>
-                  <Button
-                    disabled
-                    className="w-full bg-secondary/50"
-                  >
-                    <Mic size={16} className="mr-2" />
-                    Start Voice Chat
-                  </Button>
+              {/* Chat Input */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <MessageCircle size={16} className="text-primary" />
+                  <span className="font-medium">Chat with AI</span>
+                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                    Live
+                  </Badge>
                 </div>
+                <Textarea
+                  placeholder="Ask me anything... (Press Enter to send, Shift+Enter for new line)"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="min-h-20 resize-none bg-background/50 border-border/50"
+                />
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={isProcessing || !message.trim()}
+                  className="w-full bg-primary hover:bg-primary/90"
+                >
+                  {isProcessing ? (
+                    <>
+                      <Sparkles size={16} className="mr-2 animate-spin" />
+                      AI is responding...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} className="mr-2" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
               </div>
 
-              <div className="border-t border-border/50 pt-6">
-                <h4 className="font-semibold mb-3">Communication Features</h4>
+              <div className="border-t border-border/50 pt-4">
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                    Real-time response generation
+                    Real-time AI responses
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                    Emotional context awareness
+                    Context-aware conversations
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                    Multi-language support
+                    Powered by GPT-4o
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <div className="w-1.5 h-1.5 bg-accent rounded-full" />
-                    Privacy-first architecture
+                    Privacy-first design
                   </div>
                 </div>
               </div>
