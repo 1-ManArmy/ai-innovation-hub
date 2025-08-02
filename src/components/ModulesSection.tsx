@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Heart, Brain, ChartLine, Calendar, Camera, Mic, MessageCircle, Users, Bot, Sparkles } from '@phosphor-icons/react'
+import { Heart, Brain, ChartLine, Calendar, Camera, Mic, MessageCircle, Users, Bot, Sparkles, ChartBar } from '@phosphor-icons/react'
 
 const modules = [
   {
@@ -67,6 +67,15 @@ const modules = [
     features: ['Peer Support', 'Group Sessions', 'Anonymous Sharing'],
     icon: Users,
     status: 'Coming Soon'
+  },
+  {
+    id: 'apianalytics',
+    title: 'API Analytics Dashboard',
+    description: 'Comprehensive API usage metrics, performance monitoring, and analytics insights.',
+    subdomain: 'analytics.moodmirror.ai',
+    features: ['Usage Metrics', 'Performance Monitoring', 'Error Tracking'],
+    icon: ChartBar,
+    status: 'Available'
   },
   {
     id: 'therapybot',

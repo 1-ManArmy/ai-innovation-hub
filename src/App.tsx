@@ -4,6 +4,7 @@ import { HeroSection } from '@/components/HeroSection'
 import { ModulesSection } from '@/components/ModulesSection'
 import { InteractiveChat } from '@/components/InteractiveChat'
 import { APIPlayground } from '@/components/APIPlayground'
+import { APIAnalyticsDashboard } from '@/components/APIAnalyticsDashboard'
 import { DeveloperSection } from '@/components/DeveloperSection'
 import { Footer } from '@/components/Footer'
 import { MoodAnalyzerPage } from '@/components/MoodAnalyzerPage'
@@ -15,6 +16,8 @@ function App() {
   const handleModuleSelect = (moduleId: string) => {
     if (moduleId === 'moodanalyzer') {
       setCurrentPage('moodanalyzer')
+    } else if (moduleId === 'apianalytics') {
+      setCurrentPage('apianalytics')
     }
     // Add other module routing here as they become available
   }
@@ -35,6 +38,26 @@ function App() {
       <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
         <ParticleBackground />
         <MoodAnalyzerPage onBack={handleBackToHome} />
+        <Toaster 
+          position="top-right"
+          theme="dark"
+          toastOptions={{
+            style: {
+              background: 'oklch(0.18 0.12 240)',
+              border: '1px solid oklch(0.3 0.15 240)',
+              color: 'oklch(0.92 0 0)',
+            }
+          }}
+        />
+      </div>
+    )
+  }
+
+  if (currentPage === 'apianalytics') {
+    return (
+      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+        <ParticleBackground />
+        <APIAnalyticsDashboard onBack={handleBackToHome} />
         <Toaster 
           position="top-right"
           theme="dark"
