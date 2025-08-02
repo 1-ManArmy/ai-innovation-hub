@@ -8,29 +8,36 @@ interface HeroSectionProps {
 
 export function HeroSection({ onExploreModules }: HeroSectionProps) {
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 relative">
-      {/* Logo in corner */}
-      <div className="logo-corner">
-        <div className="code-symbol">&lt;/&gt;</div>
-      </div>
+    <section className="min-h-screen flex flex-col items-center justify-center px-4 relative">
+      {/* Platform Name at Top */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="absolute top-8 left-1/2 transform -translate-x-1/2"
+      >
+        <div className="text-[10px] font-bold tracking-widest uppercase platform-name">
+          One Last AI
+        </div>
+      </motion.div>
 
-      <div className="max-w-6xl mx-auto text-center relative z-10">
+      <div className="max-w-6xl mx-auto text-center relative z-10 mt-16">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-3 mb-6">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="p-6 rounded-3xl bg-gradient-to-br from-primary to-secondary shadow-2xl glow-effect"
+              className="p-3 rounded-xl bg-gradient-to-br from-primary to-secondary shadow-2xl glow-effect"
             >
-              <Heart size={48} color="white" weight="fill" />
+              <Heart size={28} color="white" weight="fill" />
             </motion.div>
-            <h1 className="text-6xl md:text-7xl font-bold gradient-text">
-              MoodMirror.ai
+            <h1 className="text-3xl md:text-4xl font-bold gradient-text">
+              Mood Mirror AI
             </h1>
           </div>
 

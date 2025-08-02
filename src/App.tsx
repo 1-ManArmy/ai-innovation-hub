@@ -53,10 +53,10 @@ function App() {
       
       <main className="relative z-10">
         <HeroSection onExploreModules={scrollToModules} />
+        <InteractiveChat />
         <div id="modules-section">
           <ModulesSection onModuleSelect={handleModuleSelect} />
         </div>
-        <InteractiveChat />
       </main>
       
       <Toaster 

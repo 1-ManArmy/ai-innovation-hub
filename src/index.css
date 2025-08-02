@@ -94,6 +94,15 @@
   75% { transform: translateY(-30px) rotate(270deg); }
 }
 
+@keyframes shimmer {
+  0%, 100% { 
+    background: linear-gradient(135deg, oklch(0.78 0.18 195), oklch(0.65 0.15 200), oklch(0.85 0.15 270));
+  }
+  50% { 
+    background: linear-gradient(135deg, oklch(0.85 0.15 270), oklch(0.78 0.18 195), oklch(0.65 0.15 200));
+  }
+}
+
 .glow-effect {
   box-shadow: 0 0 20px oklch(0.78 0.18 195 / 0.3);
   transition: box-shadow 0.3s ease;
@@ -123,33 +132,11 @@
   overflow: hidden;
 }
 
-/* Logo corner styling */
-.logo-corner {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 50;
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.logo-corner:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
-  box-shadow: 0 8px 32px oklch(0.78 0.18 195 / 0.3);
-}
-
-.code-symbol {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: bold;
-  font-size: 24px;
-  font-family: 'JetBrains Mono', monospace;
+/* Platform name styling */
+.platform-name {
+  background: linear-gradient(135deg, oklch(0.78 0.18 195), oklch(0.65 0.15 200), oklch(0.85 0.15 270));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
 }
