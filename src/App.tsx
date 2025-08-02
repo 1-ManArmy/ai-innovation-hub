@@ -3,6 +3,8 @@ import { ParticleBackground } from '@/components/ParticleBackground'
 import { HeroSection } from '@/components/HeroSection'
 import { ModulesSection } from '@/components/ModulesSection'
 import { InteractiveChat } from '@/components/InteractiveChat'
+import { DeveloperSection } from '@/components/DeveloperSection'
+import { Footer } from '@/components/Footer'
 import { MoodAnalyzerPage } from '@/components/MoodAnalyzerPage'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -57,6 +59,8 @@ function App() {
         <div id="modules-section">
           <ModulesSection onModuleSelect={handleModuleSelect} />
         </div>
+        <DeveloperSection />
+        <Footer />
       </main>
       
       <Toaster 
