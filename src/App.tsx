@@ -413,7 +413,7 @@ function App() {
                 >
                   <Button 
                     size="lg" 
-                    className="px-8 py-6 text-lg glass-card neon-border"
+                    className="px-8 py-6 text-lg glass-card neon-border text-foreground font-semibold"
                     onClick={() => setActiveInsightTab('mood')}
                   >
                     <Heart size={20} className="mr-2" />
@@ -422,7 +422,7 @@ function App() {
                   <Button 
                     size="lg" 
                     variant="outline" 
-                    className="px-8 py-6 text-lg glass-card"
+                    className="px-8 py-6 text-lg glass-card text-foreground font-semibold border-white/20 hover:border-primary/50"
                     onClick={() => setActiveInsightTab('features')}
                   >
                     <Sparkles size={20} className="mr-2" />
@@ -730,7 +730,7 @@ function App() {
                         <Button 
                           onClick={() => analyzeMood(currentInput)}
                           disabled={isAnalyzing || !currentInput.trim()}
-                          className="w-full glass-card neon-border"
+                          className="w-full glass-card neon-border text-foreground font-semibold"
                           size="lg"
                         >
                           {isAnalyzing ? (
@@ -968,7 +968,7 @@ function App() {
                     </div>
                   ) : patternInsights.length === 0 && !isGeneratingInsights ? (
                     <div className="text-center py-8">
-                      <Button onClick={generatePatternInsights} variant="outline" className="glass-card">
+                    <Button onClick={generatePatternInsights} variant="outline" className="glass-card text-foreground border-white/20">
                         <Sparkles size={16} className="mr-2" />
                         Generate Pattern Insights
                       </Button>
@@ -1014,7 +1014,7 @@ function App() {
                             variant="outline" 
                             size="sm"
                             disabled={isGeneratingInsights}
-                            className="glass-card"
+                            className="glass-card text-foreground border-white/20"
                           >
                             <Sparkles size={14} className="mr-2" />
                             Refresh Insights
@@ -1039,7 +1039,7 @@ function App() {
                     onClick={generateWeeklySummary} 
                     variant="outline"
                     disabled={moodHistory.length < 3}
-                    className="glass-card"
+                    className="glass-card text-foreground border-white/20"
                   >
                     <Calendar size={16} className="mr-2" />
                     Generate This Week

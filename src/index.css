@@ -149,6 +149,7 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: var(--foreground);
 }
 
 .logo-corner {
@@ -253,4 +254,9 @@ body {
   border: 1px solid transparent;
   background: linear-gradient(var(--card), var(--card)) padding-box,
               linear-gradient(135deg, var(--primary), var(--accent)) border-box;
+  color: var(--foreground) !important;
+}
+
+.neon-border:hover {
+  color: var(--foreground) !important;
 }
